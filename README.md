@@ -49,7 +49,7 @@ BabbleCamBridge always asks the cameras for **compressed MJPEG**, which is only 
 - **Anti-flicker** for eye cameras: removes the rolling bands a VR headset display (e.g. Valve Index at 90 Hz) causes in cheap IR cameras
 - **Auto brightness**: eyes keep the same brightness in dark and bright VR worlds
 - Optional mirror and noise smoothing
-- Window app with live previews, or run it **in the background** with no window
+- Window app with live previews (dark mode), or run it **in the background** with no window
 - Optional autostart with Windows
 - Auto-reconnect: if a camera drops out, it comes back by itself
 

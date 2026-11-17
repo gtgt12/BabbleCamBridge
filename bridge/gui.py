@@ -393,12 +393,53 @@ class App:
 
 def main():
     root = tk.Tk()
-    try:
-        ttk.Style().theme_use("vista")
-    except tk.TclError:
-        pass
+    apply_dark_theme(root)
     App(root)
     root.mainloop()
+
+
+BG, PANEL, FIELD, FG, BORDER, ACCENT = "#1e1f22", "#2b2d31", "#383a40", "#e3e5e8", "#4e5058", "#5865f2"
+
+
+def apply_dark_theme(root):
+    """Dark window everywhere (easy on the eyes), including the Windows title bar."""
+    root.configure(bg=BG)
+    st = ttk.Style(root)
+    try:
+        st.theme_use("clam")  # the only built-in theme whose colors can be fully changed
+    except tk.TclError:
+        pass
+    st.configure(".", background=BG, foreground=FG, fieldbackground=FIELD, bordercolor=BORDER,
+                 lightcolor=PANEL, darkcolor=PANEL, troughcolor=PANEL, focuscolor=ACCENT,
+                 selectbackground=ACCENT, selectforeground=FG, insertcolor=FG)
+    st.configure("TFrame", background=BG)
+    st.configure("TLabel", background=BG, foreground=FG)
+    st.configure("TLabelframe", background=BG, bordercolor=BORDER)
+    st.configure("TLabelframe.Label", background=BG, foreground=FG)
+    st.configure("TButton", background=PANEL, foreground=FG, bordercolor=BORDER, padding=(10, 4))
+    st.map("TButton", background=[("active", FIELD), ("pressed", BORDER)])
+    st.configure("TCheckbutton", background=BG, foreground=FG, indicatorbackground=FIELD, indicatorforeground=FG)
+    st.map("TCheckbutton", background=[("active", BG)], indicatorbackground=[("selected", ACCENT), ("active", BORDER)])
+    st.configure("TEntry", fieldbackground=FIELD, foreground=FG, insertcolor=FG)
+    st.configure("TCombobox", fieldbackground=FIELD, background=PANEL, foreground=FG, arrowcolor=FG)
+    st.map("TCombobox", fieldbackground=[("readonly", FIELD)], foreground=[("readonly", FG)],
+           selectbackground=[("readonly", FIELD)], selectforeground=[("readonly", FG)])
+    # the drop-down list of a combobox is a classic Tk listbox
+    root.option_add("*TCombobox*Listbox.background", FIELD)
+    root.option_add("*TCombobox*Listbox.foreground", FG)
+    root.option_add("*TCombobox*Listbox.selectBackground", ACCENT)
+    root.option_add("*TCombobox*Listbox.selectForeground", FG)
+    # dark Windows title bar (Windows 10 2004+ / 11); ignored elsewhere
+    try:
+        import ctypes
+        root.update_idletasks()
+        hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
+        on = ctypes.c_int(1)
+        for attr in (20, 19):  # DWMWA_USE_IMMERSIVE_DARK_MODE (new / old id)
+            if ctypes.windll.dwmapi.DwmSetWindowAttribute(hwnd, attr, ctypes.byref(on), ctypes.sizeof(on)) == 0:
+                break
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":
