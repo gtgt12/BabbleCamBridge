@@ -31,7 +31,8 @@ def pythonw():
 
 
 def http_json(url, timeout=1.5):
-    with urllib.request.urlopen(url, timeout=timeout) as r:
+    req = urllib.request.Request(url, headers={"X-BabbleCamBridge": "1"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode())
 
 

@@ -75,6 +75,7 @@ class Stream(threading.Thread):
         self.stop_flag = False
         self.restart_flag = False
         self.httpd = None
+        self.host = "127.0.0.1"
 
     # -- settings ---------------------------------------------------------------------------------
     def capture_key(self, cfg=None):
@@ -210,6 +211,24 @@ def crop_box(crop, w, h):
     return x, y, max(8, min(cw, w - x)), max(8, min(ch, h - y))
 
 
+def request_allowed(handler, host="127.0.0.1"):
+    """Only answer requests meant for this PC, and never requests a web page makes from its own script.
+    - Host check: blocks 'DNS rebinding' tricks where a website pretends to be 127.0.0.1.
+    - Origin check: a web page's fetch/XHR carries an Origin header; Babble, the window app and <img>/viewer pages
+      don't. No CORS headers are sent either, so web pages can't read pictures or status."""
+    hostname = (handler.headers.get("Host") or "").rsplit(":", 1)[0].strip("[]").lower()
+    allowed = {"127.0.0.1", "localhost", "::1"}
+    if host not in ("127.0.0.1", "localhost", "0.0.0.0", ""):
+        allowed.add(host.lower())
+    if host == "0.0.0.0":  # user chose to share on the local network: allow any private address
+        allowed.add(hostname) if hostname.startswith(("192.168.", "10.", "172.")) else None
+    origin = handler.headers.get("Origin")
+    if hostname not in allowed or (origin and origin != "null"):
+        handler.send_error(403, "forbidden")
+        return False
+    return True
+
+
 def encode(arr, q):
     b = io.BytesIO()
     Image.fromarray(arr, "L").save(b, "JPEG", quality=int(q))
@@ -222,6 +241,8 @@ def mjpeg_handler(stream):
             pass
 
         def do_GET(self):
+            if not request_allowed(self, stream.host):
+                return
             path = self.path.split("?")[0]
             if path == "/snapshot.jpg":
                 jpg = stream.out.jpeg
@@ -231,7 +252,6 @@ def mjpeg_handler(stream):
                 self.send_response(200)
                 self.send_header("Content-Type", "image/jpeg")
                 self.send_header("Content-Length", str(len(jpg)))
-                self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 self.wfile.write(jpg)
                 return
@@ -242,7 +262,6 @@ def mjpeg_handler(stream):
             self.send_response(200)
             self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
             self.send_header("Cache-Control", "no-cache")
-            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
             if path == "/raw":
                 stream.raw_viewers += 1
@@ -277,6 +296,7 @@ class Bridge:
     def start_stream(self, scfg):
         st = Stream(scfg, self.ffmpeg)
         host = self.cfg.get("host", "127.0.0.1")
+        st.host = host
         try:
             st.httpd = ThreadingHTTPServer((host, int(scfg["port"])), mjpeg_handler(st))
         except OSError as e:
@@ -318,7 +338,7 @@ class Bridge:
             self.quit.wait(1)
 
     def status(self):
-        return {"running": True, "ffmpeg": self.ffmpeg, "config": CONFIG_PATH,
+        return {"running": True, "ffmpeg_found": bool(self.ffmpeg),
                 "streams": [{"name": n, "port": s.cfg["port"], "status": s.status, "fps": round(s.fps, 1)}
                             for n, s in self.streams.items()]}
 
@@ -330,12 +350,18 @@ class Bridge:
                 pass
 
             def do_GET(self):
+                if not request_allowed(self):
+                    return
                 path = self.path.split("?")[0]
                 if path == "/status":
                     body = json.dumps(bridge.status()).encode()
                 elif path == "/cameras":
                     body = json.dumps(list_cameras(max_age=0)).encode()
                 elif path == "/quit":
+                    # needs a custom header, which a web page can't send to another site without permission
+                    if self.headers.get("X-BabbleCamBridge") != "1":
+                        self.send_error(403, "forbidden")
+                        return
                     body = b'{"quitting": true}'
                     bridge.quit.set()
                 else:
@@ -343,7 +369,6 @@ class Bridge:
                     return
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 self.wfile.write(body)
         return Handler
