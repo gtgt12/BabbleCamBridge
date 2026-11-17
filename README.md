@@ -1,6 +1,28 @@
 # BabbleCamBridge
 
-Run **three USB eye/face tracking cameras at the same time** for [Baballonia / Project Babble](https://github.com/Project-Babble/Baballonia) on Windows, even through one cheap USB 2.0 hub (for example in the Valve Index frunk).
+Run **three USB eye/face tracking cameras at the same time** for [Baballonia / Project Babble](https://github.com/Project-Babble/Baballonia) on Windows, even through one cheap USB 2.0 hub (for example in the Valve Index frunk). Works with VRCFaceTracking (VRCFT) and VRChat eye tracking / face tracking setups that use cheap DIY IR cameras.
+
+## Tested hardware
+
+| Part | What was used |
+|---|---|
+| Eye cameras (×2) + face/mouth camera (×1) | **HBVCAM-1914S** IR camera module, **GC0308** sensor, shows up as **"USB 2.0 Camera" / "USB Camera"** by Sonix, USB ID **VID_0C45 PID_6366** (`0c45:6366`), 640×480 MJPEG |
+| USB hub | cheap (~5 €) USB 3.x hub with **3× USB 2.0 + 1× USB 3.0** ports, plugged into the **Valve Index frunk** USB port (no Raspberry Pi needed) |
+| Headset | Valve Index at 90 Hz |
+| Software | Baballonia (Project Babble) 1.1.1.x, Windows 11 |
+
+Other cheap UVC webcams with MJPEG (e.g. other Sonix / GC0308 / OV2640 / OV7725 based IR cameras) should work the same way. If you test another camera, please open an issue so it can be added here.
+
+## Symptoms this fixes
+
+If you search for any of these, you're in the right place:
+
+- Babble / Baballonia: **third camera won't connect**, only 2 of 3 cameras work, "**No data was received ... on any backend**", "**Maybe the camera is opened somewhere else?**"
+- 3 USB cameras on one USB hub: **"not enough USB bandwidth"**, camera works only 1 in 10 tries, needs unplugging and replugging
+- Workaround with **OBS + virtual camera** needed to get all eye cameras into Babble
+- **Flickering eye cameras** / rolling bands / stripes in the eye picture caused by the **VR headset display** (Valve Index 90 Hz, low persistence)
+- Eye picture **too dark in dark VR worlds and too bright in bright worlds**
+- Identical cameras (same name) **swap places** after replugging or reboot
 
 ## The problem it fixes
 
