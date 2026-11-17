@@ -1,5 +1,6 @@
 > [!CAUTION]
-> # 🛑 DISABLE THE IR LEDs ON THE CAMERA BOARDS BEFORE USING THEM FOR EYE TRACKING
+> # 🛑 DISABLE THE IR LIGHT NOW BEFORE YOU USE EYE TRACKING
+> ## Disable the IR LEDs on the camera boards first.
 > **The infrared LEDs on these cheap camera boards were never designed or tested for shining into your eyes. Their light output is unknown and can be unsafe.**
 > **Only use these cameras for eye tracking with the LEDs fully disabled** (desoldered, removed, or completely covered). **No IR light from the board.** Your eyes are not worth the risk.
 > If your eyes feel strained, hurt or tired after using eye tracking, stop and see an eye doctor.
