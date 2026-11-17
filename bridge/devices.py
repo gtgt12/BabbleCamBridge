@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 """Find webcams and FFmpeg on Windows.
 
 Identical cameras (same model, same name) can't be told apart by name, and Windows gives a camera a new

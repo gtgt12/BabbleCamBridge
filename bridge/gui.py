@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 """BabbleCamBridge window: start/stop the camera server, pick a camera for each stream, switch the filters on/off,
 and set the crop by dragging the box on the live picture. Closing the window leaves the server running."""
 import copy
@@ -304,7 +305,7 @@ class App:
         ttk.Button(foot, text="Open settings folder", command=lambda: os.startfile(APP_DIR)).pack(side="right")
         ttk.Label(root, text="Closing this window keeps the cameras running in the background. "
                              "In Babble, use the addresses shown above. Babble does not reconnect by itself: "
-                             "restart Babble after restarting the server.",
+                             "restart Babble after restarting the server.  (Fully vibe coded by an AI - use at your own risk.)",
                   foreground="#888", padding=(8, 0, 8, 8), wraplength=1000).pack(anchor="w")
 
         if not self.server_up():

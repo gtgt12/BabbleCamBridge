@@ -1,5 +1,7 @@
 # BabbleCamBridge
 
+> ⚠️ **Fully vibe coded.** This whole project was written by an AI (Claude) while I described what I wanted. **I have zero programming knowledge** and can't review or fix the code myself. It works on my PC, but use it at your own risk, and please check the code yourself or ask someone who can before trusting it.
+
 Run **three USB eye/face tracking cameras at the same time** for [Baballonia / Project Babble](https://github.com/Project-Babble/Baballonia) on Windows, even through one cheap USB 2.0 hub (for example in the Valve Index frunk). Works with VRCFaceTracking (VRCFT) and VRChat eye tracking / face tracking setups that use cheap DIY IR cameras.
 
 ## Tested hardware

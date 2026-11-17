@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 # BabbleCamBridge installer: installs Python and FFmpeg if missing (via winget), sets up a private Python
 # environment in this folder, and creates desktop shortcuts. Safe to run again (e.g. after updating).
 param([switch]$NoShortcuts)

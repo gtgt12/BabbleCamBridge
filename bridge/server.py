@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 """BabbleCamBridge server: reads several webcams at once and serves each as a low-latency MJPEG stream.
 
 Why: three USB 2.0 cameras opened uncompressed (what most apps do) don't fit through one USB 2.0 hub, so the

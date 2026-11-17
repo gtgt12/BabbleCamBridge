@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 import numpy as np
 from collections import deque
 

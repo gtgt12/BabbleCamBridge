@@ -1,3 +1,4 @@
+# NOTE: Fully vibe coded - written by an AI (Claude). The repo owner has no programming knowledge; review before trusting.
 """Settings file handling. The settings live in %APPDATA%\\BabbleCamBridge\\config.json, so updating or re-downloading
 the program never overwrites them."""
 import copy
