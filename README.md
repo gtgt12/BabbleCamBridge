@@ -1,3 +1,9 @@
+> [!CAUTION]
+> # 🛑 DISABLE THE IR LEDs ON THE CAMERA BOARDS BEFORE USING THEM FOR EYE TRACKING
+> **The infrared LEDs on these cheap camera boards were never designed or tested for shining into your eyes. Their light output is unknown and can be unsafe.**
+> **Only use these cameras for eye tracking with the LEDs fully disabled** (desoldered, removed, or completely covered). **No IR light from the board.** Your eyes are not worth the risk.
+> If your eyes feel strained, hurt or tired after using eye tracking, stop and see an eye doctor.
+
 # BabbleCamBridge
 
 > ⚠️ **Fully vibe coded.** This whole project was written by an AI (Claude) while I described what I wanted. **I have zero programming knowledge** and can't review or fix the code myself. It works on my PC, but use it at your own risk, and please check the code yourself or ask someone who can before trusting it.
