@@ -13,6 +13,10 @@
 
 Run **three USB eye/face tracking cameras at the same time** for [Baballonia / Project Babble](https://github.com/Project-Babble/Baballonia) on Windows, even through one cheap USB 2.0 hub (for example in the Valve Index frunk). Works with VRCFaceTracking (VRCFT) and VRChat eye tracking / face tracking setups that use cheap DIY IR cameras.
 
+![BabbleCamBridge window: three camera panels (face, left eye, right eye) with live preview, crop box and filter options, in dark mode](docs/screenshot.png)
+
+*The window app (dark mode). The previews here are drawn placeholder pictures; in real use you see your cameras live and drag the red box to set what Babble sees.*
+
 ## Tested hardware
 
 | Part | What was used |

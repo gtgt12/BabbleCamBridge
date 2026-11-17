@@ -20,6 +20,11 @@ sys.path.insert(0, HERE)
 from config import APP_DIR, CONFIG_PATH, DEFAULT_INPUT, load_config, save_config  # noqa: E402
 from devices import NOWIN, describe, list_cameras  # noqa: E402
 
+# Demo mode (BCB_DEMO=1): made-up cameras and drawn pictures, no server, nothing saved. Used for README screenshots.
+DEMO = os.environ.get("BCB_DEMO") == "1"
+if DEMO:
+    import demo  # noqa: E402
+
 PREVIEW_W = 320
 STARTUP_LNK = os.path.join(os.environ.get("APPDATA", ""), r"Microsoft\Windows\Start Menu\Programs\Startup",
                            "BabbleCamBridge.lnk")
@@ -181,6 +186,9 @@ class StreamPanel(ttk.LabelFrame):
     def start_preview(self):
         if self.preview:
             self.preview.alive = False
+        if DEMO:
+            self.preview = demo.FakePreview(self.s["name"])
+            return
         self.preview = Preview(self.s["port"])
         self.preview.start()
 
@@ -276,8 +284,8 @@ class App:
     def __init__(self, root):
         self.root = root
         root.title("BabbleCamBridge")
-        self.cfg = load_config()
-        self.cameras = list_cameras(max_age=0)
+        self.cfg = demo.CONFIG if DEMO else load_config()
+        self.cameras = demo.CAMERAS if DEMO else list_cameras(max_age=0)
         self.status = None
         self.save_job = None
 
@@ -308,6 +316,13 @@ class App:
                              "restart Babble after restarting the server.  (Fully vibe coded by an AI - use at your own risk.)",
                   foreground="#888", padding=(8, 0, 8, 8), wraplength=1000).pack(anchor="w")
 
+        if DEMO:
+            self.status = demo.STATUS
+            self.tick()
+            if os.environ.get("BCB_SCREENSHOT"):
+                root.attributes("-topmost", True)
+                root.after(3000, lambda: demo.screenshot(root, os.environ["BCB_SCREENSHOT"]))
+            return
         if not self.server_up():
             self.start_server()
         self.tick()
@@ -362,7 +377,8 @@ class App:
 
     def flush_save(self):
         self.save_job = None
-        save_config(self.cfg)
+        if not DEMO:
+            save_config(self.cfg)
 
     def refresh_cameras(self):
         self.cameras = list_cameras(max_age=0)
@@ -370,6 +386,8 @@ class App:
             p.refresh_cameras()
 
     def toggle_autostart(self):
+        if DEMO:
+            return
         if self.autostart.get():
             ps = ("$s=(New-Object -ComObject WScript.Shell).CreateShortcut($env:LNK);"
                   "$s.TargetPath=$env:EXE;$s.Arguments='\"'+$env:SRV+'\"';$s.WorkingDirectory=$env:DIR;$s.Save()")
