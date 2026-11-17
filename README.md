@@ -4,7 +4,7 @@
 > **Only use these cameras for eye tracking with the LEDs fully disabled** (desoldered, removed, or completely covered). **No IR light from the board.** Your eyes are not worth the risk.
 > If your eyes feel strained, hurt or tired after using eye tracking, stop and see an eye doctor.
 >
-> **💡 How it works without the LEDs:** turn the **display brightness up inside your headset**. The light from the lenses lights up your eyes, and BabbleCamBridge's **auto brightness** handles the rest. (In very dark VR worlds the eye picture gets darker and noisier, so tracking can be a bit worse there.)
+> **💡 How it works without the LEDs:** turn the **display brightness up inside your headset**. The light from the lenses lights up your eyes, and BabbleCamBridge's **auto brightness** handles the rest. (In very dark VR worlds the eye picture gets darker and noisier, so tracking can be a bit worse there. This only works **without a visible-light-blocking / IR-pass filter** in front of the camera, because those filters block the display light.)
 
 # BabbleCamBridge
 
